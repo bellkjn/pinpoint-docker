@@ -345,6 +345,32 @@ services:
     networks:
       - pinpoint
 
+  pinpoint-c-agent:
+    container_name: "${PINPOINT_C_AGENT_NAME}"
+    image: "ghcr.io/pinpoint-apm/pinpoint-c-agent/collector-agent:latest"
+
+    depends_on:
+      - pinpoint-hbase
+      - pinpoint-mysql
+      - zoo1
+    restart: always
+    expose:
+      - "9999"
+    ports:
+      - "9999:9999"
+    environment:
+      - PP_COLLECTOR_AGENT_SPAN_IP=${PP_COLLECTOR_AGENT_SPAN_IP}
+      - PP_COLLECTOR_AGENT_SPAN_PORT=${PP_COLLECTOR_AGENT_SPAN_PORT}
+      - PP_COLLECTOR_AGENT_AGENT_IP=${PP_COLLECTOR_AGENT_AGENT_IP}
+      - PP_COLLECTOR_AGENT_AGENT_PORT=${PP_COLLECTOR_AGENT_AGENT_PORT}
+      - PP_COLLECTOR_AGENT_STAT_IP=${PP_COLLECTOR_AGENT_STAT_IP}
+      - PP_COLLECTOR_AGENT_STAT_PORT=${PP_COLLECTOR_AGENT_STAT_PORT}
+      - PP_COLLECTOR_AGENT_ISDOCKER=${PP_COLLECTOR_AGENT_ISDOCKER}
+      - PP_LOG_DIR=${PP_LOG_DIR}
+      - PP_Log_Level=${PP_Log_Level}
+      - PP_ADDRESS=${PP_ADDRESS}
+    networks:
+      - pinpoint
 volumes:
   data-volume:
   mysql_data:
